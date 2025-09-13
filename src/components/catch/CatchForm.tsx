@@ -22,13 +22,24 @@ export default function CatchForm({ onCatchAdded }: { onCatchAdded: () => void }
     
     try {
       setIsSubmitting(true);
+      // Ensure user is authenticated and capture their id for RLS
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError || !user) {
+        throw new Error('Please sign in to record catches');
+      }
+
+      const today = new Date().toISOString().split('T')[0];
+
       const { error } = await supabase
         .from('catches')
         .insert([
           { 
+            fisher_id: user.id,
             fish_type: fishType, 
             quantity_kg: parseFloat(quantity),
             price_per_kg: parseFloat(price),
+            catch_date: today,
+            status: 'approved',
           },
         ]);
 

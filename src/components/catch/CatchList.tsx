@@ -11,6 +11,7 @@ interface Catch {
   quantity_kg: number;
   price_per_kg: number;
   catch_date: string;
+  created_at: string;
   status: string;
 }
 
@@ -96,7 +97,7 @@ export default function CatchList() {
                         {(item.quantity_kg * item.price_per_kg).toFixed(2)}
                       </TableCell>
                       <TableCell>
-                        {format(new Date(item.catch_date + 'T' + item.created_at.split('T')[1]), 'h:mm a')}
+                        {format(new Date(item.catch_date), 'MMM d, yyyy h:mm a')}
                       </TableCell>
                     </TableRow>
                   ))}

@@ -1,62 +1,152 @@
-# AquaLink Kenya
+<div align="center">
+  <h1>AquaLink Kenya</h1>
+  <p>A comprehensive platform connecting fishers and buyers in Kenya's seafood industry, promoting sustainable fishing practices and efficient trade.</p>
+  
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+  [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+  [![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2FVincent-Ojiambo%2FAquaLink)](https://twitter.com/intent/tweet?text=Check%20out%20AquaLink%20Kenya%21%20A%20platform%20connecting%20fishers%20and%20buyers%20in%20Kenya%27s%20seafood%20industry.&url=https%3A%2F%2Fgithub.com%2FVincent-Ojiambo%2FAquaLink)
 
-A platform connecting fishers and buyers in Kenya for efficient seafood trade.
+  <img src="/public/Aqua_Link.png" alt="AquaLink Kenya Logo" width="200"/>
+</div>
 
-## Features
+## 🌟 Features
 
-- Fisher profiles and catch listings
-- Real-time marketplace for fresh fish
-- Secure authentication and user management
-- Image uploads for product listings
-- Responsive design for all devices
+### For Fishers
+- 🎣 Create and manage your professional fisher profile
+- 📱 List your daily catch with real-time updates
+- 📍 Show your location and fishing zones
+- 💳 Secure payment processing
+- 🚨 Emergency safety features and alerts
 
-## Tech Stack
+### For Buyers
+- 🛒 Browse fresh catch from local fishers
+- 🔍 Advanced search and filtering
+- 📅 Schedule pickups or deliveries
+- ⭐ Rate and review fishers
+- 🔄 Real-time inventory updates
 
-- React + TypeScript + Vite
-- Tailwind CSS + Shadcn UI
-- Supabase (Auth, Database, Storage)
-- React Query
-- React Hook Form
+### Safety Features
+- 🆘 Emergency alert system
+- 📍 Live location sharing
+- 🚨 Quick access to emergency contacts
+- 🛟 Safety guidelines and resources
 
-## Getting Started
+## 🚀 Tech Stack
 
-There are several ways of editing your application.
+### Frontend
+- ⚛️ React 18 with TypeScript
+- 🎨 Tailwind CSS + Shadcn UI
+- 🚀 Vite for fast development
+- 📱 Fully responsive design
 
-**Use Lovable**
+### Backend
+- 🔐 Supabase Authentication
+- 🗄️ PostgreSQL Database
+- 📦 Supabase Storage for media
+- 🔄 Real-time updates with Supabase
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/a26aeace-09ae-415d-879a-bee5f72669f1) and start prompting.
+### Development Tools
+- 🧪 React Query for server state
+- 📝 React Hook Form for forms
+- 🎯 ESLint + Prettier
+- 🐳 Docker support
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🛠️ Getting Started
 
-**Use your preferred IDE**
+### Prerequisites
+- Node.js 18+ (LTS recommended)
+- npm 9+ or yarn 1.22+
+- Git
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Local Development
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Vincent-Ojiambo/AquaLink.git
+   cd AquaLink
+   ```
 
-Follow these steps:
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   yarn
+   ```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+3. **Set up environment variables**
+   Create a `.env` file in the root directory:
+   ```env
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+4. **Start the development server**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+   The app will be available at `http://localhost:5173`
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 📱 Mobile App
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+AquaLink also has a companion mobile app (coming soon) with additional features:
+- 📍 Offline access to critical information
+- 🚨 Push notifications for alerts
+- 📸 Direct image capture for catch listings
+- 🗺️ Offline maps for remote areas
+
+## 🤝 Contributing
+
+We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Kenyan fishing communities for their invaluable input
+- Open source contributors
+- The React and Supabase communities
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+1. Push your code to a GitHub repository
+2. Import the repository in [Vercel](https://vercel.com/new)
+3. Add environment variables in Vercel project settings
+4. Deploy!
+
+### Other Platforms
+This project can be deployed to any platform that supports Node.js applications, including:
+- Netlify
+- Heroku
+- AWS Amplify
+- Render
+
+## 🧩 Project Structure
+
+```
+src/
+├── components/     # Reusable UI components
+├── pages/         # Page components
+├── hooks/         # Custom React hooks
+├── lib/           # Utility functions and configurations
+├── types/         # TypeScript type definitions
+├── contexts/      # React context providers
+└── assets/        # Static assets (images, icons, etc.)
 ```
 
-**Edit a file directly in GitHub**
+## 📝 Available Scripts
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+- `npm run format` - Format code with Prettier
 
-## Environment Variables
+## 🌐 Environment Variables
 
 Create a `.env` file in the root directory with the following variables:
 
@@ -67,66 +157,9 @@ VITE_APP_TITLE="AquaLink Kenya"
 VITE_APP_DESCRIPTION="Connecting fishers and buyers in Kenya"
 ```
 
-## Available Scripts
+## 📚 Resources
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-
-## Deployment
-
-### Vercel
-
-1. Push your code to a GitHub repository
-2. Import the repository in [Vercel](https://vercel.com/new)
-3. Add environment variables in Vercel project settings
-4. Deploy!
-
-### Local Development
-
-1. Clone the repository
-2. Install dependencies: `npm install`
-3. Copy `.env.example` to `.env` and fill in your Supabase credentials
-4. Run `npm run dev`
-5. Open [http://localhost:8080](http://localhost:8080) in your browser
-
-## Project Structure
-
-- `/src/components` - Reusable UI components
-- `/src/pages` - Page components
-- `/src/hooks` - Custom React hooks
-- `/src/lib` - Utility functions and configurations
-- `/src/types` - TypeScript type definitions
-- `/public` - Static assets
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a new Pull Request
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/a26aeace-09ae-415d-879a-bee5f72669f1) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- [Vite Documentation](https://vitejs.dev/guide/)
+- [React Documentation](https://react.dev/learn)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs/installation)
+- [Supabase Documentation](https://supabase.com/docs)

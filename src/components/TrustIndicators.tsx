@@ -3,15 +3,25 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Shield, Award, Users, Zap, Lock, Globe, Phone, Wifi } from "lucide-react";
 
+interface ContentType {
+  title: string;
+  subtitle: string;
+  indicators: {
+    icon: React.ElementType;
+    title: string;
+    description: string;
+  }[];
+}
+
 interface TrustIndicatorsProps {
   language: 'en' | 'sw';
 }
 
 const TrustIndicators = ({ language }: TrustIndicatorsProps) => {
-  const content = {
+  const content: Record<string, any> = {
     en: {
       title: "Trusted & Secure Platform",
-      subtitle: "AquaNet Kenya meets the highest standards for security, reliability, and performance",
+      subtitle: "AquaLink Kenya meets the highest standards for security, reliability, and performance",
       indicators: [
         {
           icon: Shield,
@@ -51,7 +61,7 @@ const TrustIndicators = ({ language }: TrustIndicatorsProps) => {
     },
     sw: {
       title: "Jukwaa la Kuaminiwa na Salama",
-      subtitle: "AquaNet Kenya inakutana na viwango vya juu vya usalama, kuaminika, na utendaji",
+      subtitle: "AquaLink Kenya inakutana na viwango vya juu vya usalama, kuaminika, na utendaji",
       indicators: [
         {
           icon: Shield,
@@ -91,16 +101,10 @@ const TrustIndicators = ({ language }: TrustIndicatorsProps) => {
     }
   };
 
-  const currentContent = content[language];
+  // Get content without partnerships
+  const { partnerships, ...contentWithoutPartnerships } = content[language];
+  const currentContent = contentWithoutPartnerships as ContentType;
 
-  const partnerLogos = [
-    { name: "Kenya Marine Institute", logo: "🏛️" },
-    { name: "M-Pesa", logo: "💳" },
-    { name: "Safaricom", logo: "📱" },
-    { name: "Kenya Fisheries Service", logo: "🐟" },
-    { name: "UN Sustainable Development", logo: "🌍" },
-    { name: "World Bank", logo: "🏦" }
-  ];
 
   return (
     <section className="py-20 px-6 bg-primary text-white">
@@ -133,35 +137,8 @@ const TrustIndicators = ({ language }: TrustIndicatorsProps) => {
           ))}
         </div>
 
-        {/* Partnerships Section */}
-        <div className="text-center animate-fade-in">
-          <h3 className="text-2xl md:text-3xl font-bold mb-4">
-            {currentContent.partnerships.title}
-          </h3>
-          <p className="text-lg opacity-90 mb-12 max-w-3xl mx-auto">
-            {currentContent.partnerships.subtitle}
-          </p>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
-            {partnerLogos.map((partner, index) => (
-              <div 
-                key={index} 
-                className="group text-center hover:scale-110 transition-transform duration-300 animate-float"
-                style={{ animationDelay: `${index * 0.2}s` }}
-              >
-                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">
-                  {partner.logo}
-                </div>
-                <p className="text-xs text-white/60 group-hover:text-white/80 transition-colors">
-                  {partner.name}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Security Badges */}
-        <div className="flex justify-center items-center gap-8 mt-16 animate-fade-in">
+        <div className="flex justify-center items-center gap-8 mt-8 animate-fade-in">
           <Badge className="bg-white/20 text-white border-white/30 px-4 py-2">
             <Lock className="w-4 h-4 mr-2" />
             {language === 'en' ? 'SSL Secured' : 'SSL Salama'}

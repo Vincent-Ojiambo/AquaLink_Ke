@@ -10,6 +10,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Fish, Users, LogIn, UserPlus, Phone, Mail } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/types/database.types";
+
+type Profile = Database['public']['Tables']['profiles']['Insert'];
+type Tables = Database['public']['Tables'];
+type ProfilesTable = Tables['profiles'];
+type ProfileInsert = ProfilesTable['Insert'];
 
 interface AuthModalProps {
   open: boolean;
@@ -33,7 +39,7 @@ const AuthModal = ({ open, onOpenChange, language }: AuthModalProps) => {
 
   const text = {
     en: {
-      title: isLogin ? 'Welcome Back to AquaNet' : 'Join AquaNet Kenya',
+      title: isLogin ? 'Welcome Back to AquaLink' : 'Join AquaLink Kenya',
       description: isLogin 
         ? 'Sign in to access your dashboard and connect with the fishing community' 
         : 'Create your account and become part of Kenya\'s digital fishing revolution',
@@ -62,11 +68,11 @@ const AuthModal = ({ open, onOpenChange, language }: AuthModalProps) => {
       switchToLogin: 'Already have an account? Sign in here',
       success: {
         login: 'Welcome back! Redirecting to your dashboard...',
-        register: 'Account created successfully! Welcome to AquaNet Kenya!'
+        register: 'Account created successfully! Welcome to AquaLink Kenya!'
       }
     },
     sw: {
-      title: isLogin ? 'Karibu Tena AquaNet' : 'Jiunge na AquaNet Kenya',
+      title: isLogin ? 'Karibu Tena AquaLink' : 'Jiunge na AquaLink Kenya',
       description: isLogin
         ? 'Ingia ili kufikia dashibodi yako na kuungana na jamii ya uvuvi'
         : 'Unda akaunti yako na kuwa sehemu ya mapinduzi ya uvuvi wa kidijitali ya Kenya',
@@ -95,7 +101,7 @@ const AuthModal = ({ open, onOpenChange, language }: AuthModalProps) => {
       switchToLogin: 'Una akaunti tayari? Ingia hapa',
       success: {
         login: 'Karibu tena! Tunaongoza kwenda dashibodi yako...',
-        register: 'Akaunti imeundwa kwa ufanisi! Karibu AquaNet Kenya!'
+        register: 'Akaunti imeundwa kwa ufanisi! Karibu AquaLink Kenya!'
       }
     }
   };
@@ -132,28 +138,44 @@ const AuthModal = ({ open, onOpenChange, language }: AuthModalProps) => {
         onOpenChange(false);
         
         // Get user profile to determine redirect
-        const { data: profile } = await supabase
+        const { data: profile, error: profileError } = await supabase
           .from('profiles')
-          .select('user_type')
+          .select('*')
           .eq('user_id', data.user.id)
-          .single();
+          .single() as { data: Profile | null; error: any };
 
-        if (profile?.user_type === 'fisher') {
-          navigate('/fisher-dashboard');
-        } else if (profile?.user_type === 'buyer') {
-          navigate('/buyer-dashboard');
+        if (profileError) {
+          console.error('Error fetching profile:', profileError);
+          navigate('/');
+          return;
+        }
+
+        if (profile) {
+          if (profile.user_type === 'fisher') {
+            navigate('/fisher-dashboard');
+          } else if (profile.user_type === 'buyer') {
+            navigate('/buyer-dashboard');
+          } else {
+            navigate('/');
+          }
         }
         
       } else {
         // Register new user
         const redirectUrl = `${window.location.origin}/`;
         
-        // First, sign up the user
+        // First, sign up the user with metadata
         const { data: authData, error: signUpError } = await supabase.auth.signUp({
           email: formData.email,
           password: formData.password,
           options: {
             emailRedirectTo: redirectUrl,
+            data: {
+              name: formData.name,
+              phone: formData.phone,
+              region: formData.region,
+              user_type: userType
+            }
           }
         });
 
@@ -166,29 +188,11 @@ const AuthModal = ({ open, onOpenChange, language }: AuthModalProps) => {
           return;
         }
 
-        // Then create the user's profile with the correct user type
-        if (authData.user) {
-          const { error: profileError } = await supabase
-            .from('profiles')
-            .insert([
-              {
-                user_id: authData.user.id,
-                name: formData.name,
-                user_type: userType,
-                phone: formData.phone,
-                region: formData.region,
-              }
-            ]);
-
-          if (profileError) {
-            toast({
-              title: language === 'en' ? "Profile Creation Failed" : "Kutengeneza Profaili Kumeshindikana",
-              description: profileError.message,
-              variant: "destructive",
-            });
-            return;
-          }
-        }
+        // Profile is automatically created by the handle_new_user trigger
+        toast({
+          title: language === 'en' ? "Success!" : "Imefanikiwa!",
+          description: currentText.success.register,
+        });
 
         // Check if user is immediately signed in (email confirmation disabled)
         if (authData.user && !authData.user.email_confirmed_at) {

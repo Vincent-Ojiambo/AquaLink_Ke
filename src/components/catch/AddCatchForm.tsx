@@ -149,9 +149,9 @@ export default function AddCatchForm({ onSuccess }: AddCatchFormProps) {
         quantity_kg: quantityNum,
         price_per_kg: priceNum,
         catch_date: new Date().toISOString().split('T')[0],
-        status: 'pending',
         image_url: imageUrl,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
+        status: 'approved'
       };
       
       console.log('Prepared catch data:', JSON.stringify(catchData, null, 2));
