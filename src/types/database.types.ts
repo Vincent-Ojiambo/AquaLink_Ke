@@ -9,6 +9,44 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      transactions: {
+        Row: {
+          id: string
+          catch_id: string
+          fisher_id: string
+          amount: number
+          status: 'pending' | 'completed' | 'failed'
+          payment_method: string
+          payment_reference: string
+          phone_number: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          catch_id: string
+          fisher_id: string
+          amount: number
+          status?: 'pending' | 'completed' | 'failed'
+          payment_method: string
+          payment_reference: string
+          phone_number: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          catch_id?: string
+          fisher_id?: string
+          amount?: number
+          status?: 'pending' | 'completed' | 'failed'
+          payment_method?: string
+          payment_reference?: string
+          phone_number?: string
+          created_at?: string
+          updated_at?: string
+        }
+      },
       catches: {
         Row: {
           id: string
