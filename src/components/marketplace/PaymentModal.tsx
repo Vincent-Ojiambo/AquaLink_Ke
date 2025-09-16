@@ -3,33 +3,40 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2, Smartphone, CheckCircle, XCircle } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
-import { createClient } from '@supabase/supabase-js';
-import type { Database } from "@/types/database.types";
+import { supabase } from "@/integrations/supabase/client";
 
-type Transaction = Database['public']['Tables']['transactions']['Insert'];
-type TransactionStatus = 'completed' | 'pending' | 'failed';
-type Catches = Database['public']['Tables']['catches']['Update'];
+// Define types manually to avoid dependency on database.types.ts
+interface TransactionInsert {
+  id?: string;
+  catch_id: string;
+  fisher_id: string;
+  amount: number;
+  status: 'pending' | 'completed' | 'failed';
+  payment_method: string;
+  payment_reference: string;
+  phone_number: string;
+  created_at?: string;
+  updated_at?: string;
+}
 
-// Initialize Supabase client with proper typing
-const supabase = createClient<Database>(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY,
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-    },
-  }
-);
+interface CatchesUpdate {
+  status: 'available' | 'sold' | 'discarded';
+  updated_at?: string;
+  [key: string]: any;
+}
 
-// Helper type for the transactions table
-type TransactionTable = Database['public']['Tables']['transactions'];
-type TransactionInsert = TransactionTable['Insert'];
-type TransactionUpdate = TransactionTable['Update'];
+type TransactionStatus = 'pending' | 'completed' | 'failed';
 
-// Helper type for the catches table
-type CatchesTable = Database['public']['Tables']['catches'];
-type CatchesUpdate = CatchesTable['Update'];
+// Extend the types to include our custom fields
+type CustomTransactionInsert = Omit<TransactionInsert, 'status' | 'payment_method' | 'payment_reference' | 'phone_number'> & {
+  status: TransactionStatus;
+  payment_method: string;
+  payment_reference: string;
+  phone_number: string;
+};
+
+// Use CatchesUpdate directly since we've defined it manually
+type CustomCatchesUpdate = CatchesUpdate;
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -84,34 +91,36 @@ export default function PaymentModal({ isOpen, onClose, listing, onSuccess }: Pa
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       // Create a transaction record in the database
-      const transactionData = {
+      const transactionData: CustomTransactionInsert = {
         catch_id: listing.id,
         fisher_id: listing.fisher_id,
         amount: listing.quantity_kg * listing.price_per_kg,
-        status: 'completed' as const,
-        payment_method: 'mpesa' as const,
+        status: 'completed',
+        payment_method: 'mpesa',
         payment_reference: `MPESA-${Date.now()}`,
         phone_number: `+254${phoneNumber}`,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
       };
-      
+
       // Insert transaction with type assertion
-      const { data: transaction, error: insertError } = await (supabase
-        .from('transactions') as any)
+      const { data, error: insertError } = await (supabase as any)
+        .from('transactions')
         .insert([transactionData])
         .select()
         .single();
-
+      
       if (insertError) throw insertError;
 
-      // Update the catch status to approved since 'sold' is not a valid status
-      const updateData = { 
-        status: 'approved' as const,
+      // Update the catch status to sold
+      const updateData: CustomCatchesUpdate = { 
+        status: 'sold',
         updated_at: new Date().toISOString()
       };
-      
+
       // Update catch status with type assertion
-      const { error: updateError } = await (supabase
-        .from('catches') as any)
+      const { error: updateError } = await (supabase as any)
+        .from('catches')
         .update(updateData)
         .eq('id', listing.id);
 

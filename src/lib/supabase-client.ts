@@ -1,9 +1,30 @@
 import { createClient, SupabaseClient as SupabaseClientBase } from '@supabase/supabase-js';
-import { Database } from '@/types/supabase';
 
-type Profile = Database['public']['Tables']['profiles']['Row'];
-type ProfileInsert = Database['public']['Tables']['profiles']['Insert'];
-type ProfileUpdate = Database['public']['Tables']['profiles']['Update'];
+// Define types manually since they're not properly generated
+type Profile = {
+  id: string;
+  user_id: string;
+  user_type: 'fisher' | 'buyer';
+  name?: string;
+  phone?: string;
+  email?: string;
+  avatar_url?: string;
+  region?: string;
+  license_number?: string;
+  years_of_experience?: number;
+  created_at: string;
+  updated_at: string;
+};
+
+type ProfileInsert = Omit<Profile, 'id' | 'created_at' | 'updated_at'> & {
+  id?: string;
+  created_at?: string;
+  updated_at?: string;
+};
+
+type ProfileUpdate = Partial<Omit<Profile, 'id' | 'user_id' | 'created_at'>> & {
+  updated_at?: string;
+};
 
 interface SupabaseResponse<T> {
   data: T | null;
@@ -12,10 +33,10 @@ interface SupabaseResponse<T> {
 
 // Create a type-safe wrapper around the Supabase client
 class SupabaseClient {
-  private client: SupabaseClientBase<Database>;
+  private client: ReturnType<typeof createClient>;
 
   constructor(supabaseUrl: string, supabaseKey: string) {
-    this.client = createClient<Database>(supabaseUrl, supabaseKey);
+    this.client = createClient(supabaseUrl, supabaseKey);
   }
 
   // Get the raw client
@@ -28,32 +49,36 @@ class SupabaseClient {
     id: string, 
     updates: Omit<ProfileUpdate, 'id' | 'user_id' | 'created_at'>
   ): Promise<SupabaseResponse<Profile>> {
-    const { data, error } = await this.client
+    const updateData: ProfileUpdate = {
+      ...updates,
+      updated_at: new Date().toISOString()
+    };
+    
+    const { data, error } = await (this.client as any)
       .from('profiles')
-      .update({
-        ...updates,
-        updated_at: new Date().toISOString()
-      } as ProfileUpdate)
+      .update(updateData)
       .eq('id', id)
       .select()
       .single();
 
-    return { data, error };
+    return { data, error } as SupabaseResponse<Profile>;
   }
 
   // Type-safe insert
   async insertProfile(profile: Omit<ProfileInsert, 'created_at' | 'updated_at'>): Promise<SupabaseResponse<Profile>> {
-    const { data, error } = await this.client
+    const insertData: ProfileInsert = {
+      ...profile,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+    
+    const { data, error } = await (this.client as any)
       .from('profiles')
-      .insert({
-        ...profile,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      } as any)
+      .insert([insertData])
       .select()
       .single();
 
-    return { data, error };
+    return { data, error } as SupabaseResponse<Profile>;
   }
 
   // Type-safe upsert
@@ -95,7 +120,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.log('VITE_SUPABASE_ANON_KEY:', import.meta.env.VITE_SUPABASE_ANON_KEY);
 }
 
-// Export a singleton instance
-export const supabase = new SupabaseClient(supabaseUrl, supabaseAnonKey);
+// Create a single supabase client for interacting with your database
+const supabase = new SupabaseClient(supabaseUrl, supabaseAnonKey);
 
-export type { Database };
+export default supabase;

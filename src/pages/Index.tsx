@@ -41,13 +41,13 @@ const Index = () => {
     en: {
       hero: {
         title: "AquaLink Kenya",
-        subtitle: "Empowering Coastal Communities Through Technology",
-        description: "Connect fishers and buyers, promote sustainable fishing, and strengthen Kenya's marine economy with our comprehensive digital platform.",
+        subtitle: "Empowering Fishing Communities Across Kenya's Waters",
+        description: "Connecting fishers and buyers across Kenya's coastal and inland lake regions. Promote sustainable fishing practices and strengthen local economies with our comprehensive digital platform.",
         fisherCta: "Join as Fisher",
         buyerCta: "Join as Buyer"
       },
       features: {
-        title: "Transforming Kenya's Fishing Industry",
+        title: "Transforming Kenya's Fishing Industry - From Coast to Lakes",
         fisher: {
           title: "For Fishers",
           description: "Tools to optimize your catch, stay safe, and connect with buyers",
@@ -60,8 +60,8 @@ const Index = () => {
         }
       },
       impact: {
-        title: "Making Waves Across Kenya",
-        communities: "Coastal Communities Served",
+        title: "Making Waves Across Kenya's Waters",
+        communities: "Coastal & Lake Communities Served",
         fishers: "Registered Fishers",
         transactions: "Monthly Transactions"
       }
@@ -69,13 +69,13 @@ const Index = () => {
     sw: {
       hero: {
         title: "AquaLink Kenya",
-        subtitle: "Kuwezesha Jamii za Pwani Kupitia Teknolojia",
-        description: "Unganisha wavuvi na wanunuzi, kukuza uvuvi endelevu, na kuimarisha uchumi wa bahari wa Kenya kupitia jukwaa letu la kidijitali.",
+        subtitle: "Kuwezesha Jamii za Wavuvi Kotekote Nchini Kenya",
+        description: "Unganisha wavuvi na wanunuzi katika maeneo ya pwani na maziwa ya bara, kukuza uvuvi endelevu, na kuimarisha uchumi wa majini wa Kenya kupitia jukwaa letu la kidijitali.",
         fisherCta: "Jiunge kama Mvuvi",
         buyerCta: "Jiunge kama Mnunuzi"
       },
       features: {
-        title: "Kubadilisha Sekta ya Uvuvi ya Kenya",
+        title: "Kubadilisha Sekta ya Uvuvi ya Kenya - Kutoka Pwani Hadi Maziwa",
         fisher: {
           title: "Kwa Wavuvi",
           description: "Zana za kuboresha uvuvi wako, kukaa salama, na kuungana na wanunuzi",
@@ -88,8 +88,8 @@ const Index = () => {
         }
       },
       impact: {
-        title: "Kuleta Mabadiliko Kote Kenya",
-        communities: "Jamii za Pwani Zinazotumiwa",
+        title: "Kuleta Mabadiliko Kwenye Maji ya Kenya Yote",
+        communities: "Jamii za Pwani na Maziwa Zinazotumiwa",
         fishers: "Wavuvi Waliosajiliwa", 
         transactions: "Miamala ya Kila Mwezi"
       }

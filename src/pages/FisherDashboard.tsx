@@ -46,11 +46,11 @@ const FisherDashboard = () => {
 
         setUser(user);
 
-        const { data: profile, error: profileError } = await supabase
+        const { data: profile, error: profileError } = await (supabase as any)
           .from('profiles')
           .select('*')
           .eq('user_id', user.id)
-          .single();
+          .single() as { data: Profile | null; error: any };
 
         if (profileError) {
           console.error('Error fetching profile:', profileError);
@@ -63,6 +63,12 @@ const FisherDashboard = () => {
         }
 
         // Check if user is a fisher
+        if (!profile) {
+          console.error('Profile not found');
+          window.location.href = '/';
+          return;
+        }
+
         if (profile.user_type !== 'fisher') {
           console.error('Unauthorized access: User is not a fisher');
           window.location.href = '/';

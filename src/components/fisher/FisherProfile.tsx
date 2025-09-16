@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/lib/supabase-client";
+import supabase from "@/lib/supabase-client";
 import { User } from "@supabase/supabase-js";
 import { Database } from "@/types/supabase";
 // No need to import updateProfile/upsertProfile as they're now part of the supabase client

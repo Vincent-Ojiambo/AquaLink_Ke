@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { Database } from '@/types/supabase';
+import { Database } from '@/types/database.types';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "https://ajadkcbvnfcskeekipkz.supabase.co";
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqYWRrY2J2bmZjc2tlZWtpcGt6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3OTgzOTQsImV4cCI6MjA3MjM3NDM5NH0.Jm5i7W2-JwwvDdfLhfdoBRF_2oOWhjR-Ridc5OD4Nyg";
@@ -7,6 +7,10 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIU
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables');
 }
+
+type Tables = Database['public']['Tables'];
+
+export type SupabaseClient = ReturnType<typeof createClient<Database>>;
 
 export const supabase = createClient<Database>(
   supabaseUrl,
@@ -19,3 +23,9 @@ export const supabase = createClient<Database>(
     }
   }
 );
+
+// Type-safe table accessors
+export const tables = {
+  transactions: () => supabase.from('transactions'),
+  catches: () => supabase.from('catches')
+};
